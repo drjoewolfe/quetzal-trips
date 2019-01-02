@@ -3,6 +3,7 @@ package org.jwolfe.quetzal.trips;
 import org.jwolfe.quetzal.library.trips.Trip;
 import org.jwolfe.quetzal.library.utilities.Utilities;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -27,7 +28,6 @@ public class Streams implements Trip {
         //      default Stream<E> parallelStream()
         //
 
-
         // java.util.Arrays
         //      static <T> Stream<T> stream(T[] array, int startInclusive, int endExclusive)
         //
@@ -50,6 +50,10 @@ public class Streams implements Trip {
         //      static <T> Stream<T> empty()
         //      static <T> Stream<T> generate(Supplier<T> s)
         //      static <T> Stream<T> iterate(T seed, UnaryOperator<T> f)
+        //
+        //      Stream<T> filter(Predicate<? super T> predicate)
+        //      <R> Stream<R> map(Function<? super T,? extends R> mapper)
+        //      <R> Stream<R> flatMap(Function<? super T,? extends Stream<? extends R>> mapper)
         //
 
         //  java.util.function.Supplier<T>
@@ -88,5 +92,37 @@ public class Streams implements Trip {
         log("iterated stream: ", iteratedStream, 20, ",");
 
         endSection();
+
+        section("Streams: Filter / Map / Flat Mao");
+
+        log("list of words: ", wordsList.stream(), 20, ",");
+
+        Stream<String> lowerCaseWords =  wordsList.stream().map(String::toLowerCase);
+        log("lower case words: ", lowerCaseWords, 20, ",");
+
+        Stream<String> upperCaseWords =  wordsList.stream().map(String::toUpperCase);
+        log("upper case words: ", upperCaseWords, 20, ",");
+
+        Stream<String> firstLetters = wordsList.stream().map(s -> s.substring(0, 1));
+        log("word's first letters: ", firstLetters, 20, ",");
+
+        log("Stream word letters: ", streamLetters("boat"), ",");
+
+        Stream<Stream<Character>> letterStream = wordsList.stream().map( s -> streamLetters(s));
+        log("Stream content letters: ", letterStream, 100, ",");
+
+        Stream<Character> flatLetterStream = wordsList.stream().flatMap( s -> streamLetters(s));
+        log("Stream content letters: ", flatLetterStream, 100, ",");
+
+        endSection();
+    }
+
+    private Stream<Character> streamLetters(String str) {
+        List<Character> list = new ArrayList<>();
+        for (int i = 0; i < str.length(); i++) {
+            list.add(str.charAt(i));
+        }
+
+        return list.stream();
     }
 }
