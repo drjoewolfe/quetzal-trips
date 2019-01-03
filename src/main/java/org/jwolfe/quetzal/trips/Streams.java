@@ -55,6 +55,33 @@ public class Streams implements Trip {
         //      <R> Stream<R> map(Function<? super T,? extends R> mapper)
         //      <R> Stream<R> flatMap(Function<? super T,? extends Stream<? extends R>> mapper)
         //
+        //      Stream<T> limit(long maxSize)
+        //      Stream<T> skip(long n)
+        //      static <T> Stream<T> concat(Stream<? extends T> a, Stream<? extends T> b)
+        //
+        //      Stream<T> distinct()
+        //      Stream<T> sorted()
+        //      Stream<T> sorted(Comparator<? super T> comparator)
+        //      Stream<T> peek(Consumer<? super T> action)
+        //
+        //      Optional<T> max(Comparator<? super T> comparator)
+        //      Optional<T> min(Comparator<? super T> comparator)
+        //      Optional<T> findFirst()
+        //      Optional<T> findAny()
+        //      boolean anyMatch(Predicate<? super T> predicate)
+        //      boolean allMatch(Predicate<? super T> predicate)
+        //      boolean noneMatch(Predicate<? super T> predicate)
+        //
+
+        //  java.util.Optional
+        //      T orElse(T other)
+        //      T orElseGet(Supplier<? extends T> other)
+        //      <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier)
+        //      void ifPresent(Consumer<? super T> consumer
+        //
+        //      <U> Optional<U> map(Function<? super T,? extends U> mapper)
+        //      <U> Optional<U> flatMap(Function<? super T,Optional<U>> mapper)
+        //
 
         //  java.util.function.Supplier<T>
         //      T get()
@@ -72,6 +99,7 @@ public class Streams implements Trip {
         log("count of words with length > 10 (standard streams): " + count1);
         log("count of words with length > 10 (parallel streams): " + count2);
         endSection();
+
 
         section("Stream Creation");
 
@@ -93,7 +121,8 @@ public class Streams implements Trip {
 
         endSection();
 
-        section("Streams: Filter / Map / Flat Mao");
+
+        section("Streams: Filter / Map / Flat Map");
 
         log("list of words: ", wordsList.stream(), 20, ",");
 
@@ -115,6 +144,47 @@ public class Streams implements Trip {
         log("Stream content letters: ", flatLetterStream, 100, ",");
 
         endSection();
+
+
+        section("Streams: Extracting & Concatenating");
+
+        randoms = Stream.generate(Math::random).limit(100);
+        log("limited to 100: ", randoms);
+
+        Stream<String> skipped = wordsList.stream().skip(10);
+        log("10 words skipped: ", skipped, 20, ",");
+
+        Stream<Character> s1 = streamLetters("Mary had a little lamb... ");
+        Stream<Character> s2 = streamLetters("Its fleece was white as snow... ");
+        Stream<Character> s3 = Stream.concat(s1, s2);
+        log("concatenated streams: ", s3);
+
+        endSection();
+
+
+        section("Streams: Other transformations");
+
+        s1 = streamLetters("By default, SSL user names are of the form CN=writeUse, OU= Unknowm, L=Unknown, ST=Unknown, C=Unknown;");
+        log("starting stream: ", s1, ",");
+
+        s1 = streamLetters("By default, SSL user names are of the form CN=writeUse, OU= Unknowm, L=Unknown, ST=Unknown, C=Unknown;");
+        s1 = s1.distinct();
+        log("distinct stream: ", s1, ",");
+
+        s1 = streamLetters("By default, SSL user names are of the form CN=writeUse, OU= Unknowm, L=Unknown, ST=Unknown, C=Unknown;");
+        s1 = s1.sorted();
+        log("sorted stream: ", s1);
+
+        Stream<Integer> i1 = Stream.iterate(2, i -> i*2);
+        log("multiplied by 2: ", i1, 20, ",");
+
+        i1 = Stream
+                .iterate(2, i -> i*2)
+                .peek(i -> System.out.println("\t\tpeek: " + i));
+        log("peeked (m by 2): ", i1, 20, ",");
+
+        endSection();
+
     }
 
     private Stream<Character> streamLetters(String str) {
