@@ -11,6 +11,7 @@ public class JavaItinerary extends Itinerary {
     public List<Trip> loadTrips() {
         super.loadTrips();
         trips.add(new Streams());
+        trips.add(new Generics());
         return trips;
     }
 }
