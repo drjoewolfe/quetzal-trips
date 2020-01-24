@@ -1,4 +1,4 @@
-package org.jwolfe.quetzal.trips.types;
+package org.jwolfe.quetzal.trips.types.fruits;
 
 public class Melon extends Fruit {
     @Override
