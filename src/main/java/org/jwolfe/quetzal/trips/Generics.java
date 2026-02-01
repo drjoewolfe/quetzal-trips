@@ -55,7 +55,7 @@ public class Generics implements Trip {
     }
 
     private void printBasket(FruitBasket<?> fruitBasket) {
-        fruitBasket.getBasket().forEach (item -> log(item.toString()));
+        fruitBasket.forEach (item -> log(item.toString()));
     }
 
     private List<Fruit> getFruits() {
